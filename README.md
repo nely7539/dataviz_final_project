@@ -31,7 +31,7 @@ In the `project_01/` folder you can find my work from the first mini project fro
 
 **Sample data visualization:** 
 
-<img src="https://github.com/reisanar/figs/raw/master/echarts.png" width="70%" height="70%">
+!(figures/RatSightMonthYear)
 
 
 ## Project 02
@@ -60,10 +60,7 @@ In this project, I explored birth rates in the US across 2010-2014. Find the cod
   - These are also possibly areas with a higher population of younger people 
 
 **Sample data visualization:** 
-
-<img src="https://github.com/nely7539/dataviz_final_project/blob/main/figures/BirthSpatial.png" width="80%" height="80%">
-
-(you can place your figures in the `figures/` folder and use the `![](path_to_picture)` option to add the pictures here)
+!(figures/BirthSpatial.png)
 
 
 ## Project 03
@@ -82,7 +79,7 @@ In this project, I explored a few different data sets
 
 **Sample data visualization:** 
 
-!(figures/BirthSpatial.png)
+!(figures/SentimentAnalysis.png)
 
 
 ### Moving Forward
