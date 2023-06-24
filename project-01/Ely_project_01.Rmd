@@ -22,7 +22,7 @@ library(RColorBrewer)
 ### Import Data
 
 ```{r}
-rats_data <- read.csv("~/Desktop/Summer A 2023/Data Viz/Projects/Final_Project/Ely_dataviz_final_project/data/rats_nyc.csv")
+rats_data <- read.csv("https://raw.githubusercontent.com/nely7539/dataviz_final_project/main/data/rats_nyc.csv")
 ```
 
 
