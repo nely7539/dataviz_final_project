@@ -31,7 +31,7 @@ In the `project_01/` folder you can find my work from the first mini project fro
 
 **Sample data visualization:** 
 
-!(/figures/RatSightMonthYear.png)
+<img src="https://github.com/nely7539/dataviz_final_project/blob/059f7f320827ec3da563199faf01de977735fc43/figures/RatSightMonthYear.png?raw=true" width="70%" height="70%">
 
 
 ## Project 02
@@ -61,7 +61,8 @@ In this project, I explored birth rates in the US across 2010-2014. Find the cod
 
 **Sample data visualization:** 
 
-!(/figures/BirthSpatial.png)
+<img src="https://github.com/nely7539/dataviz_final_project/blob/059f7f320827ec3da563199faf01de977735fc43/figures/BirthSpatial.png?raw=true" width="70%" height="70%">
+
 
 
 ## Project 03
@@ -80,7 +81,7 @@ In this project, I explored a few different data sets
 
 **Sample data visualization:** 
 
-!(figures/SentimentAnalysis.png)
+<img src="https://github.com/nely7539/dataviz_final_project/blob/059f7f320827ec3da563199faf01de977735fc43/figures/SentimentAnalysis.png?raw=true" width="70%" height="70%">
 
 
 ### Moving Forward
@@ -91,4 +92,4 @@ I'm also glad to have refreshed on Git, as I don't frequently use it in my curre
 
 Another aspect that I feel like will better me in my career has been the file organization and repositories aspect of the course. I'm notoriously not the best at organizing my files (I know where everything is, but no one else does), so I plan to start organizing my folders and using r project files much more.
 
-Thank you!!
+Thank you!
