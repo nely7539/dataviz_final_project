@@ -31,7 +31,7 @@ In the `project_01/` folder you can find my work from the first mini project fro
 
 **Sample data visualization:** 
 
-!(figures/RatSightMonthYear.png)
+!(/figures/RatSightMonthYear.png)
 
 
 ## Project 02
