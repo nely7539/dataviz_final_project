@@ -25,7 +25,7 @@ library(scales)
 
 ```{r}
 us_births <- read_csv("~/Desktop/Summer A 2023/Data Viz/Projects/Ely_dataviz_mini-project_02/data/us_births_00_14.csv")
-spatial_births <- read_csv("~/Desktop/Summer A 2023/Data Viz/Projects/Ely_dataviz_mini-project_02/data/birth-rate-by-state.csv")
+spatial_births <- read_csv("https://raw.githubusercontent.com/nely7539/dataviz_final_project/main/data/birth-rate-by-state.csv")
 ```
 
 ## Summarizing the data
@@ -111,7 +111,7 @@ interactive_plot
 ```
 
 ```{r}
-htmlwidgets::saveWidget(interactive_plot, "birth_month_year.html")
+htmlwidgets::saveWidget(interactive_plot, "figures/birth_month_year.html")
 ```
 
 - For the interactive visualization, I figured a line chart would be best, as it allows you to see each data point across the line. I found the 2009-2013 dip interesting, so I wanted to see what that would look like with the addition of months. Adding months to the graph definitely changed things, whereas the month bar graph showed very little variation. This has less to do with the data, and more to do with the fact that the contents of a visualization can starkly change the perception. In the original month bar-graph, the y-axis ranged from 200k-400k, whereas this visualization only spans from 300k-400k, which makes the graph easier to digest.
@@ -153,7 +153,7 @@ This was when I realized the US Births data would be difficult to use for the ne
 
 ```{r}
 library(sf)
-states <- read_sf("~/Desktop/Summer A 2023/Data Viz/Projects/Ely_dataviz_mini-project_02/data/cb_2018_us_state_20m/cb_2018_us_state_20m.shp")
+states <- read_sf("data/cb_2018_us_state_20m/cb_2018_us_state_20m.shp")
 ```
 
 ```{r}

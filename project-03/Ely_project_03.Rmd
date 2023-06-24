@@ -155,11 +155,30 @@ tpa_months %>%
 (e) Create a plot of your choice that uses the attribute for precipitation _(values of -99.9 for temperature or -99.99 for precipitation represent missing data)_.
 
 ### E
+```{r}
+library(plotly)
+```
+
 
 ```{r}
-tpa_clean %>% 
-  ggplot(aes(x=precipitation, y=ave_temp, na.rm=T), na.rm=T) +
-  geom_col(na.rm=T)
+int_plot <- tpa_months %>% 
+  ggplot(aes(x=max_temp, y=precipitation, color=month_name)) +
+  geom_point() +
+  labs(x="Maximum temperature", y="Precipitation", title="Precipitation vs. maximum temperature", subtitle="Tampa International Airport - 2022", color="") +
+  theme_bw()
+interactive_plot <- ggplotly(int_plot)
+```
+
+```{r}
+interactive_plot
+```
+
+> In this plot, I wanted to include an interactive visualization since they're my favorite.
+
+As someone who grew up in Florida, I can definitely confirm we have more rain during the warmer seasons, especially this year. Breaking down the graph by months, and we can see when the cold/warm fronts normally hit in the fall and spring.
+
+```{r}
+htmlwidgets::saveWidget(interactive_plot, "figures/precipitation.html")
 ```
 
 
