@@ -61,7 +61,7 @@ In this project, I explored birth rates in the US across 2010-2014. Find the cod
 
 **Sample data visualization:** 
 
-<img src="https://raw.githubusercontent.com/reisanar/dataviz_final_project/main/figures/fl_higher_ed.png" width="80%" height="80%">
+<img src="https://github.com/nely7539/dataviz_final_project/blob/main/figures/BirthSpatial.png" width="80%" height="80%">
 
 (you can place your figures in the `figures/` folder and use the `![](path_to_picture)` option to add the pictures here)
 
@@ -73,6 +73,7 @@ In this project, I explored a few different data sets
 ### Part 1: Tampa International Airport Weather data in 2022
 - This was mainly recreating visualizations, but it was very interesting seeing the different applications of ggplot and similar packages
 - One thing I noticed is that the temperatures are very different between 2022 and 2016, especially in December
+- I made a figure graphing precipitation and maximum temperatures among months, which showed rain is more frequent among wamrer months
   
 ### Part 2: Florida Polytechnic University news articles
 - For this data set, I conducted sentiment analysis using AFINN and a side-by-side barplot for all 12 months of the year
@@ -81,7 +82,7 @@ In this project, I explored a few different data sets
 
 **Sample data visualization:** 
 
-<img src="https://github.com/reisanar/figs/raw/master/concrete_density.png" width="80%" height="80%">
+!(figures/BirthSpatial.png)
 
 
 ### Moving Forward
