@@ -1,0 +1,191 @@
+---
+title: "Mini-Project 02"
+output: 
+  html_document:
+    keep_md: true
+    toc: true
+    toc_float: true
+---
+
+# Data Visualization Project 02: US Birth Rates (2000-2014)
+
+
+My motivation for this project is to explore birth rates across the US states from 2000-2014. Birth rates are a defining factor in population and general welfare across the US. It's interesting to see the fluctuation in rates across years, as well as across states. We can infer aspects such as the economy, the existing populations in states, as well as the comparison between child-bearing age citizens vs. non-childbearing ages in certain states.
+
+```{r}
+library(tidyverse)
+library(plotly)
+library(dplyr)
+library(broom)
+library(sf)
+library(RColorBrewer)
+library(scales)
+```
+
+
+```{r}
+us_births <- read_csv("~/Desktop/Summer A 2023/Data Viz/Projects/Ely_dataviz_mini-project_02/data/us_births_00_14.csv")
+spatial_births <- read_csv("~/Desktop/Summer A 2023/Data Viz/Projects/Ely_dataviz_mini-project_02/data/birth-rate-by-state.csv")
+```
+
+## Summarizing the data
+
+```{r}
+head(us_births)
+```
+
+```{r}
+births_by_year <- us_births %>%
+  group_by(year) %>%
+  summarize(total_births=sum(births))
+
+```
+
+```{r}
+births_by_year %>% 
+  ggplot(aes(x=year, y=total_births)) + 
+  geom_line() +
+  labs(title="Distribution of Births in the US",
+       subtitle="2000 - 2014",
+       x="Year",
+       y="Number of Births") +
+  theme_light() +
+  theme(plot.title=element_text(face="bold", size=12)) +
+  scale_x_continuous(breaks=seq(2000, 2014, by=2))
+```
+- I wanted to get a better understanding of the data by doing a few simpler visualizations. I started by plotting the number of birthdays per year on a line. This allowed me to see a spike in births in 2007, and a steep decline in 2009-2013. There are a few possibilities for this, such as the 2008 recession. 
+
+
+```{r}
+births_month <- us_births %>%
+  group_by(month) %>%
+  summarize(count=sum(births))
+```
+
+```{r}
+births_month %>% 
+  ggplot(aes(x=month, y = count)) +
+  geom_bar(stat="identity") +
+  labs(x="Month", 
+       y="Number of Births", 
+       title="Births per Month", 
+       subtitle="2000-2014") +
+  coord_flip() +
+  scale_x_continuous(breaks=seq(1, 12, by=1)) +
+  theme_light() +
+  theme(plot.title=element_text(face="bold", size=12)) +
+  scale_fill_viridis_c(name="Area", labels = scales::comma) +
+  scale_y_continuous(labels = comma)
+  
+```
+
+
+- Another I wanted to look at were the months with the most births, which didn't yield very much. The month with the most births is August, whereas the least is February. This is no surprise, months with more days, unlike February, have more births. 
+
+- Originally, the number of births were in scientific notation, which bothered me as it becomes more difficult to understand. With the spatial visualization homework, I learned how to use scales and applied it here.
+
+## Visualization 1: Interactive Visualization
+
+```{r}
+births_month_year <- us_births %>%
+  group_by(year, month) %>%
+  summarize(count=sum(births))
+```
+
+```{r}
+viz1 <- births_month_year %>% 
+  ggplot(aes(x=month, y=count, color=as.factor(year))) +
+  geom_line() +
+  labs(x="Month", 
+       y="Number of Births", 
+       title="Birth Counts by Month and Year", 
+       color="Year") +
+  theme_light() +
+  scale_x_continuous(breaks=seq(1, 12, by=1)) +
+  theme(plot.title=element_text(face="bold", size=12))
+```
+
+```{r}
+interactive_plot <- ggplotly(viz1) 
+interactive_plot
+```
+
+```{r}
+htmlwidgets::saveWidget(interactive_plot, "birth_month_year.html")
+```
+
+- For the interactive visualization, I figured a line chart would be best, as it allows you to see each data point across the line. I found the 2009-2013 dip interesting, so I wanted to see what that would look like with the addition of months. Adding months to the graph definitely changed things, whereas the month bar graph showed very little variation. This has less to do with the data, and more to do with the fact that the contents of a visualization can starkly change the perception. In the original month bar-graph, the y-axis ranged from 200k-400k, whereas this visualization only spans from 300k-400k, which makes the graph easier to digest.
+
+## Visualization 2: Model Visualization 
+
+
+```{r}
+birth_model <- lm(births ~ year + date_of_month, data=us_births)
+tidy(birth_model)
+```
+```{r}
+birth_coefs <- tidy(birth_model, conf.int=TRUE) %>% 
+  filter(term!="(Intercept)")
+birth_coefs
+
+```
+
+
+```{r}
+birth_coefs %>% 
+ggplot(aes(x=estimate, y=fct_rev(term))) +
+  geom_pointrange(aes(xmin=conf.low, xmax=conf.high)) +
+  geom_vline(xintercept=0, color="red") + 
+  theme_light()
+```
+- In this plot, it's show that year has a far negative impact on birth numbers, and date of month teeters between positive and negative at 0, which means it has very little impact.
+
+```{r}
+png("/figures/p2_coeff.png")
+```
+
+
+## Visualization 3: Spatial Visualization
+
+This was when I realized the US Births data would be difficult to use for the next plot, as it lacked geographical data. 
+
+> I found data for state birth rates in 2021 from [World Population Review](https://worldpopulationreview.com/state-rankings/birth-rate-by-state) to continue with this visualization. I also downloaded a shape file from census.gov.
+
+```{r}
+library(sf)
+states <- read_sf("~/Desktop/Summer A 2023/Data Viz/Projects/Ely_dataviz_mini-project_02/data/cb_2018_us_state_20m/cb_2018_us_state_20m.shp")
+```
+
+```{r}
+birth_rates <- spatial_births %>%
+  select(state, cdc2021Births) %>% 
+  rename(births=cdc2021Births) %>% 
+  rename(NAME=state)
+
+```
+
+> To merge the shapefile and the data, I had to select and rename the variables to match up.
+ 
+```{r}
+state_data <- left_join(states, birth_rates, by="NAME")
+map_limits <- st_crs("+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=37.5 +lon_0=-96")
+
+```
+
+
+```{r}
+state_data %>% ggplot() +
+  geom_sf(aes(fill=births), color="white") +
+  coord_sf(crs=map_limits) +
+  scale_fill_gradient(low="lightgreen", high="sienna2", name="Birth Rate", labels=scales::comma) +
+  theme_void() +
+  theme(legend.position="bottom", 
+        legend.key.size=unit(1, 'cm'),
+        legend.key.height=unit(0.5, 'cm'),
+        legend.key.width=unit(1.5, 'cm'),
+        plot.title=element_text(face="bold", size=12)) +
+  labs(title="Birth Rates Across the US", subtitle="2021") +
+  scale_y_continuous(labels=comma) 
+```
+
+- This visualization shows the birth rates across the US in 2021. We can see California and Texas have large spikes in birth rates, probably due to their already high population numbers.

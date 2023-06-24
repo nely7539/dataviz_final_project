@@ -1,0 +1,150 @@
+---
+title: "Mini-Project 01"
+output: 
+  html_document:
+    keep_md: true
+    toc: true
+    toc_float: true
+---
+
+# Data Visualization Project 01 - New York City Rats
+
+## Analysis
+
+### Load packages
+
+```{r}
+library(tidyverse)
+library(RColorBrewer)
+```
+
+
+### Import Data
+
+```{r}
+rats_data <- read.csv("~/Desktop/Summer A 2023/Data Viz/Projects/Final_Project/Ely_dataviz_final_project/data/rats_nyc.csv")
+```
+
+
+### Summarize each variable
+
+```{r}
+summary(rats_data)
+```
+
+
+### Summary Statistics
+
+
+
+##### Rat sightings based on cities
+
+```{r}
+city_rats <- table(toupper(rats_data$city))
+city_rats
+```
+
+
+
+> When running this line - I noticed due to the case sensitivity the city variable included duplicate city names with different case, so I used the *toupper()* function to remove the duplicates.
+
+
+
+
+```{r}
+rats_data$city <- toupper(rats_data$city)
+```
+
+
+## Visualizations
+
+
+### Visualization 1: Largest Number of Rat Sightings in New York
+
+
+
+
+> To get a general feel of the data, I started by looking at the frequency of rat sightings across the most frequent cities. 
+
+
+```{r}
+rats_data %>% 
+  group_by(city) %>% 
+  summarise(count=n()) %>% 
+  top_n(5, wt=count) %>% 
+  ggplot(aes(x=city, y=count, fill=city)) +
+  scale_fill_brewer(palette="Paired") +
+  geom_col() +
+  labs(title="Rat Sightings Across New York", subtitle="Over the years 2015-2017", x="City", y="Number of Rat Sightings") +
+  theme_classic() +
+  coord_flip() +
+  theme(legend.position="none") +
+  theme(plot.title=element_text(face="bold", size=12)) 
+```
+
+- Brooklyn and New York City have the highest frequency of rat sightings, with over 10,000 each over the years 2015-2017. Bronx follows, and Staten Island and Jamaica have much lower numbers. All of these areas are cities/boroughs in or near New York City, so it seems the majority of the rat population comes from NYC and it's adjacent cities. This visualization is limited, as a basic bar graph. 
+
+- Originally, the graph was vertical. However realizing that the x-axis was cateogrical, I found horizontal bars to be a better visualization. It's easier to process amounts when the bars are horizontal.
+
+
+
+
+### Visualization 2: Number of Rat Sightings Over Time
+
+
+
+> For this visualization, I wanted to look at the rat sightings over spans of time. Using geographical context, we can assume the general season of these times.
+
+
+
+```{r}
+rats_data %>% group_by(sighting_year, sighting_month) %>% 
+  summarise(count=n()) %>% 
+  ggplot(aes(x=as.factor(sighting_month), y=count, fill=as.factor(sighting_year))) +
+  scale_fill_brewer(palette="Set2") +
+  geom_col() +
+  labs(title="Rat Sightings 2015-2017", x="Month",y="Rat Sightings", fill="Year") +
+  theme_classic() +
+  theme(plot.title=element_text(face="bold", size=12)) 
+```
+
+
+
+- It can be seen that the summer season (June-September) has the highest numbers of rat sightings. The frigid weather during the colder seasons of New York may cause the rats to seek and stay in shelter, however it could also present mass death. More data would be needed to further explore this idea.
+
+- Some months had no sightings in specific years. 2015 specifically lacked sightings across months the most, from Janaury to May. 2017 had a similar pattern in October-December. This could possibly be due to rat control measures, or from data collection.
+
+- I used a palette with distinct colors to visualize the different years. I originally used co-ord flip, but due to the axes being nominal, a vertical bar graph is more useful in describing the data. By using stacked bars, it allows us to see not only the variation of month, but also year. Looking at multiple variables at once better explains the correlation, however too many variables can clutter and make the graph confusing, which is why I wanted to keep it fairly simple.
+
+
+### Visualization 3: Rat Sightings & Address Type
+
+
+
+```{r}
+rats_data2 <- rats_data %>%
+  arrange(desc(location_type)) %>% 
+  group_by(location_type) %>% 
+  top_n(4, location_type)
+head(rats_data2)
+
+```
+
+> I wanted to look at this chart to change up from the bar charts and see if there's anything to learn from this visualization. Address type can explain the distribution of rat sightings per location. With this, we can visualize the different categories used to classify whether the sighting was reported from an address, block, intersection, latitude and longitude, or the name of a specific place. 
+
+```{r}
+rats_data2 %>% 
+  group_by(address_type) %>% 
+  ggplot(aes(x=address_type, na.rm=T)) +
+  geom_density(fill="#89D293", color="#89D293", alpha=0.8, na.rm=T)+
+  theme_minimal() +
+  scale_x_discrete(labels = c('Address','Block','Intersection', 'Lat/Long', 'Place Name', '')) +
+  labs(title="Rat sightings and address types", x="Address Type", y="Density", subtitle="Rat sightings across the top 5 adress types in NYC") +
+  theme(plot.title=element_text(face="bold", size=12)) 
+  
+```
+
+- Looking at this density distribution, it can be seen that most of the rat sightings, besides those at residential addresses, occur outdoors on blocks and intersections. I would have expected those to be at places like restaurants and stores (i.e. "Place Name"), as those are areas with food and other waste, but the visualization shows otherwise. Address seems like the easiest location to verify rat sightings and utilize proper control measures.
+
+- I chose this graph as it's one that's not seen often, looking back, a bar graph would've been more useful, but after creating 2 other bar graphs, I wanted to change things up.
+
