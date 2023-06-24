@@ -31,7 +31,7 @@ In the `project_01/` folder you can find my work from the first mini project fro
 
 **Sample data visualization:** 
 
-!(figures/RatSightMonthYear)
+!(figures/RatSightMonthYear.png)
 
 
 ## Project 02
@@ -60,7 +60,8 @@ In this project, I explored birth rates in the US across 2010-2014. Find the cod
   - These are also possibly areas with a higher population of younger people 
 
 **Sample data visualization:** 
-!(figures/BirthSpatial.png)
+
+!(/figures/BirthSpatial.png)
 
 
 ## Project 03
